@@ -1,98 +1,97 @@
-"""
-guest.py
-This module contains classes for managing guest information in the Royal Stay Hotel Management System.
-"""
+# loyalty_status.py
+from enum import Enum
+
+class LoyaltyStatus(Enum):
+    """Defines the status of a guest's loyalty membership."""
+    NONE = "None"      # No loyalty membership
+    ACTIVE = "Active"  # Active loyalty membership
+    INACTIVE = "Inactive"  # Inactive loyalty membership
+    GOLD = "Gold"      # Gold-tier loyalty membership
+# guest.py
 
 class Guest:
-    def __init__(self, guest_id, name, email, phone_number, loyalty_status, account_creation_date):
-        """Initialize guest attributes."""
-        self.guest_id = guest_id
-        self.name = name
-        self.email = email
-        self.phone_number = phone_number
-        self.loyalty_status = loyalty_status
-        self.account_creation_date = account_creation_date
+    """
+    Represents a guest at the Royal Stay Hotel.
 
-    def create_account(self):
-        """Simulate creating a new account."""
-        print(f"Account created for {self.name}")
+    Attributes:
+        guest_id (str): Unique identifier for the guest.
+        name (str): Guest's full name.
+        email (str): Guest's email.
+        phone (str): Guest's phone number.
+        loyalty_status (LoyaltyStatus): Guest's loyalty status (using the LoyaltyStatus Enum).
+    """
 
-    def update_profile(self, name=None, email=None, phone_number=None):
-        """Update guest profile details."""
-        if name:
-            self.name = name
-        if email:
-            self.email = email
-        if phone_number:
-            self.phone_number = phone_number
-        print(f"Profile updated for {self.name}")
+    def __init__(self, guest_id, name, email, phone, loyalty_status=LoyaltyStatus.NONE):
+        # Initialize the guest with the provided details
+        self.__guest_id = guest_id
+        self.__name = name
+        self.__email = email
+        self.__phone = phone
+        self.__loyalty_status = loyalty_status
 
-    def view_reservation_history(self):
-        """Display the reservation history of the guest."""
-        print(f"Showing reservation history for {self.name}")
+    def __setattr__(self, key, value):
+        """Enforce rules for setting attributes."""
+        if key in ["_Guest__name", "_Guest__email", "_Guest__phone"]:
+            if not isinstance(value, str) or not value.strip():
+                raise ValueError(f"{key} must be a non-empty string.")
+        elif key == "_Guest__loyalty_status":
+            if not isinstance(value, LoyaltyStatus):
+                raise ValueError("Loyalty status must be a valid LoyaltyStatus enum.")
+        super().__setattr__(key, value)
 
-    def get_loyalty_info(self):
-        """Retrieve the guest's loyalty program details."""
-        return self.loyalty_status
+    # Getter Methods
+    def get_guest_id(self):
+        return self.__guest_id
 
-    def request_service(self, service_type):
-        """Request a hotel service such as housekeeping or transportation."""
-        print(f"{self.name} has requested {service_type} service.")
+    def get_name(self):
+        return self.__name
 
-class RegularGuest(Guest):
-    def __init__(self, guest_id, name, email, phone_number, loyalty_status, account_creation_date, 
-                 newsletter_subscribed, last_stay_date, preferred_room_type, total_stays):
-        """Initialize attributes for a regular guest."""
-        super().__init__(guest_id, name, email, phone_number, loyalty_status, account_creation_date)
-        self.newsletter_subscribed = newsletter_subscribed
-        self.last_stay_date = last_stay_date
-        self.preferred_room_type = preferred_room_type
-        self.total_stays = total_stays
+    def get_email(self):
+        return self.__email
 
-    def subscribe_newsletter(self):
-        """Subscribe to the hotel's newsletter."""
-        self.newsletter_subscribed = True
-        print(f"{self.name} subscribed to the newsletter.")
+    def get_phone(self):
+        return self.__phone
 
-    def cancel_newsletter(self):
-        """Cancel the newsletter subscription."""
-        self.newsletter_subscribed = False
-        print(f"{self.name} unsubscribed from the newsletter.")
+    def get_loyalty_status(self):
+        return self.__loyalty_status
 
-    def get_stay_count(self):
-        """Return the total number of stays."""
-        return self.total_stays
+    # Setter Methods
+    def set_guest_id(self, guest_id):
+        self.__guest_id = guest_id
 
-class VIPGuest(Guest):
-    def __init__(self, guest_id, name, email, phone_number, loyalty_status, account_creation_date, 
-                 vip_level, dedicated_support_contact, special_discount_rate, anniversary_date, free_upgrade_eligible):
-        """Initialize attributes for a VIP guest."""
-        super().__init__(guest_id, name, email, phone_number, loyalty_status, account_creation_date)
-        self.vip_level = vip_level
-        self.dedicated_support_contact = dedicated_support_contact
-        self.special_discount_rate = special_discount_rate
-        self.anniversary_date = anniversary_date
-        self.free_upgrade_eligible = free_upgrade_eligible
-
-    def request_upgrade(self):
-        """Request a room upgrade if eligible."""
-        if self.free_upgrade_eligible:
-            print(f"{self.name} has been upgraded!")
+    def set_name(self, name):
+        if isinstance(name, str) and name.strip():
+            self.__name = name
         else:
-            print(f"{self.name} is not eligible for an upgrade.")
+            raise ValueError("Name must be a non-empty string.")
 
-    def access_vip_lounge(self):
-        """Allow access to the VIP lounge."""
-        print(f"{self.name} has accessed the VIP lounge.")
+    def set_email(self, email):
+        if isinstance(email, str) and "@" in email:
+            self.__email = email
+        else:
+            raise ValueError("Invalid email address.")
 
-    def apply_vip_discount(self):
-        """Apply VIP discount to booking."""
-        print(f"{self.name} received a {self.special_discount_rate * 100}% discount.")
+    def set_phone(self, phone):
+        if isinstance(phone, str) and phone.strip():
+            self.__phone = phone
+        else:
+            raise ValueError("Phone number must be a non-empty string.")
 
-    def get_vip_status(self):
-        """Return VIP status information."""
-        return f"VIP Level: {self.vip_level}"
+    def set_loyalty_status(self, status):
+        if isinstance(status, LoyaltyStatus):
+            self.__loyalty_status = status
+        else:
+            raise ValueError("Invalid loyalty status.")
 
-    def contact_support(self):
-        """Contact VIP support."""
-        print(f"{self.name} is contacting VIP support: {self.dedicated_support_contact}")
+    def __str__(self):
+        """Returns a string representation of the guest."""
+        return f"Guest ID: {self.__guest_id} | Name: {self.__name} | Email: {self.__email} | Phone: {self.__phone} | Loyalty Status: {self.__loyalty_status.value}"
+
+# Testing the Guest Class
+if __name__ == "__main__":
+    guest1 = Guest("G001", "Fatima Alqaoud", "fatima@gmail.com", "1234567890", LoyaltyStatus.ACTIVE)
+    print(guest1)  # Test output to check Guest details
+    guest1.set_phone("987654321")  # Update phone number
+    print("Updated Phone:", guest1.get_phone())  # Test the updated phone number
+    guest1.set_loyalty_status(LoyaltyStatus.GOLD)  # Update loyalty status
+    print("Updated Loyalty Status:", guest1.get_loyalty_status().value)  # Test updated loyalty status
