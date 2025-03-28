@@ -1,0 +1,98 @@
+"""
+guest.py
+This module contains classes for managing guest information in the Royal Stay Hotel Management System.
+"""
+
+class Guest:
+    def __init__(self, guest_id, name, email, phone_number, loyalty_status, account_creation_date):
+        """Initialize guest attributes."""
+        self.guest_id = guest_id
+        self.name = name
+        self.email = email
+        self.phone_number = phone_number
+        self.loyalty_status = loyalty_status
+        self.account_creation_date = account_creation_date
+
+    def create_account(self):
+        """Simulate creating a new account."""
+        print(f"Account created for {self.name}")
+
+    def update_profile(self, name=None, email=None, phone_number=None):
+        """Update guest profile details."""
+        if name:
+            self.name = name
+        if email:
+            self.email = email
+        if phone_number:
+            self.phone_number = phone_number
+        print(f"Profile updated for {self.name}")
+
+    def view_reservation_history(self):
+        """Display the reservation history of the guest."""
+        print(f"Showing reservation history for {self.name}")
+
+    def get_loyalty_info(self):
+        """Retrieve the guest's loyalty program details."""
+        return self.loyalty_status
+
+    def request_service(self, service_type):
+        """Request a hotel service such as housekeeping or transportation."""
+        print(f"{self.name} has requested {service_type} service.")
+
+class RegularGuest(Guest):
+    def __init__(self, guest_id, name, email, phone_number, loyalty_status, account_creation_date, 
+                 newsletter_subscribed, last_stay_date, preferred_room_type, total_stays):
+        """Initialize attributes for a regular guest."""
+        super().__init__(guest_id, name, email, phone_number, loyalty_status, account_creation_date)
+        self.newsletter_subscribed = newsletter_subscribed
+        self.last_stay_date = last_stay_date
+        self.preferred_room_type = preferred_room_type
+        self.total_stays = total_stays
+
+    def subscribe_newsletter(self):
+        """Subscribe to the hotel's newsletter."""
+        self.newsletter_subscribed = True
+        print(f"{self.name} subscribed to the newsletter.")
+
+    def cancel_newsletter(self):
+        """Cancel the newsletter subscription."""
+        self.newsletter_subscribed = False
+        print(f"{self.name} unsubscribed from the newsletter.")
+
+    def get_stay_count(self):
+        """Return the total number of stays."""
+        return self.total_stays
+
+class VIPGuest(Guest):
+    def __init__(self, guest_id, name, email, phone_number, loyalty_status, account_creation_date, 
+                 vip_level, dedicated_support_contact, special_discount_rate, anniversary_date, free_upgrade_eligible):
+        """Initialize attributes for a VIP guest."""
+        super().__init__(guest_id, name, email, phone_number, loyalty_status, account_creation_date)
+        self.vip_level = vip_level
+        self.dedicated_support_contact = dedicated_support_contact
+        self.special_discount_rate = special_discount_rate
+        self.anniversary_date = anniversary_date
+        self.free_upgrade_eligible = free_upgrade_eligible
+
+    def request_upgrade(self):
+        """Request a room upgrade if eligible."""
+        if self.free_upgrade_eligible:
+            print(f"{self.name} has been upgraded!")
+        else:
+            print(f"{self.name} is not eligible for an upgrade.")
+
+    def access_vip_lounge(self):
+        """Allow access to the VIP lounge."""
+        print(f"{self.name} has accessed the VIP lounge.")
+
+    def apply_vip_discount(self):
+        """Apply VIP discount to booking."""
+        print(f"{self.name} received a {self.special_discount_rate * 100}% discount.")
+
+    def get_vip_status(self):
+        """Return VIP status information."""
+        return f"VIP Level: {self.vip_level}"
+
+    def contact_support(self):
+        """Contact VIP support."""
+        print(f"{self.name} is contacting VIP support: {self.dedicated_support_contact}")
