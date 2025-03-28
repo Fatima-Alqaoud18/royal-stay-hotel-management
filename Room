@@ -1,0 +1,68 @@
+# room.py
+class Room:
+    """
+    Represents a hotel room.
+
+    Attributes:
+        room_number (str): The room number.
+        room_type (str): Type of room (e.g., Single, Double, Suite).
+        amenities (list): List of room amenities (e.g., Wi-Fi, TV, Fridge, Drinks, Food).
+        price_per_night (float): Price per night for the room.
+    """
+
+    def __init__(self, room_number, room_type, amenities, price_per_night):
+        # Initialize room with the room number, type, amenities, and price
+        self.__room_number = room_number
+        self.__room_type = room_type
+        self.__amenities = amenities
+        self.__price_per_night = price_per_night
+
+    def __setattr__(self, key, value):
+        """Enforces constraints when setting attributes."""
+        if key == "_Room__room_number":
+            if not isinstance(value, str) or not value.strip():
+                raise ValueError("Room number must be a non-empty string.")
+        elif key == "_Room__room_type":
+            if not isinstance(value, str) or not value.strip():
+                raise ValueError("Room type must be a non-empty string.")
+        elif key == "_Room__price_per_night":
+            if not isinstance(value, (int, float)) or value <= 0:
+                raise ValueError("Price per night must be a positive number.")
+        super().__setattr__(key, value)
+
+    # Getter Methods
+    def get_room_number(self):
+        return self.__room_number
+
+    def get_room_type(self):
+        return self.__room_type
+
+    def get_amenities(self):
+        return self.__amenities
+
+    def get_price_per_night(self):
+        return self.__price_per_night
+
+    # Setter Methods
+    def set_room_number(self, room_number):
+        self.__room_number = room_number
+
+    def set_room_type(self, room_type):
+        self.__room_type = room_type
+
+    def set_amenities(self, amenities):
+        self.__amenities = amenities
+
+    def set_price_per_night(self, price):
+        self.__price_per_night = price
+
+    def __str__(self):
+        """Returns a string representation of the room."""
+        return f"Room Number: {self.__room_number} | Type: {self.__room_type} | Amenities: {', '.join(self.__amenities)} | Price per night: ${self.__price_per_night}"
+
+# Testing the Room Class
+if __name__ == "__main__":
+    room1 = Room("101", "Deluxe Suite", ["Wi-Fi", "TV", "Fridge", "Drinks", "Food"], 1000)
+    print(room1)  # Test output to check Room details
+    room1.set_amenities(["Wi-Fi", "TV", "Mini Bar"])  # Update amenities
+    print("Updated Amenities:", room1.get_amenities())  # Test updated amenities
