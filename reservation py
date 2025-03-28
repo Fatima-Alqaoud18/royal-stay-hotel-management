@@ -1,0 +1,55 @@
+"""
+reservation.py
+This module manages room reservations and booking details for the Royal Stay Hotel Management System.
+"""
+
+class Room:
+    def __init__(self, room_number, room_type, amenities, price_per_night):
+        """Initialize a room with details such as type, amenities, and price."""
+        self.room_number = room_number
+        self.room_type = room_type
+        self.amenities = amenities  # List of amenities (e.g., ["Wi-Fi", "TV", "Mini-bar"])
+        self.price_per_night = price_per_night
+        self.is_available = True  # Room availability status
+
+    def check_availability(self):
+        """Return whether the room is available."""
+        return self.is_available
+
+    def update_status(self, status):
+        """Update the room's availability status."""
+        self.is_available = status
+
+    def display_info(self):
+        """Display room details."""
+        return f"Room {self.room_number}: {self.room_type}, {', '.join(self.amenities)}, ${self.price_per_night}/night"
+
+
+class Booking:
+    def __init__(self, booking_id, guest, room, check_in_date, check_out_date):
+        """Initialize a booking with guest details, room, and dates."""
+        self.booking_id = booking_id
+        self.guest = guest  # Guest object
+        self.room = room  # Room object
+        self.check_in_date = check_in_date
+        self.check_out_date = check_out_date
+        self.status = "Confirmed"
+
+    def cancel_booking(self):
+        """Cancel the booking and free up the room."""
+        if self.status == "Confirmed":
+            self.status = "Cancelled"
+            self.room.update_status(True)  # Mark the room as available
+            print(f"Booking {self.booking_id} has been cancelled.")
+        else:
+            print("Booking is already cancelled.")
+
+    def generate_invoice(self):
+        """Generate an invoice for the stay."""
+        nights = (self.check_out_date - self.check_in_date).days
+        total_amount = nights * self.room.price_per_night
+        return f"Invoice: {self.guest.name} - Room {self.room.room_number} - ${total_amount}"
+
+    def display_booking_details(self):
+        """Display booking information."""
+        return f"Booking {self.booking_id}: {self.guest.name}, Room {self.room.room_number}, {self.check_in_date} to {self.check_out_date}, Status: {self.status}"
