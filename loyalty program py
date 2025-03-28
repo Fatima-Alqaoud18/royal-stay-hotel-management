@@ -1,0 +1,48 @@
+"""
+loyalty_program.py
+This module manages the loyalty program for the Royal Stay Hotel Management System.
+"""
+
+class LoyaltyProgram:
+    def __init__(self, program_name, membership_levels, point_conversion_rate):
+        """Initialize the loyalty program with key details."""
+        self.program_name = program_name
+        self.membership_levels = membership_levels  # Dictionary of levels (e.g., {"Silver": 1000, "Gold": 5000})
+        self.point_conversion_rate = point_conversion_rate  # Points per dollar spent
+        self.members = {}  # Dictionary to store guests and their points
+
+    def enroll_guest(self, guest_id):
+        """Enroll a new guest in the loyalty program."""
+        if guest_id not in self.members:
+            self.members[guest_id] = 0
+            print(f"Guest {guest_id} enrolled in {self.program_name}.")
+        else:
+            print(f"Guest {guest_id} is already enrolled.")
+
+    def add_points(self, guest_id, amount_spent):
+        """Add points based on the guest's spending."""
+        if guest_id in self.members:
+            earned_points = amount_spent * self.point_conversion_rate
+            self.members[guest_id] += earned_points
+            print(f"Guest {guest_id} earned {earned_points} points.")
+        else:
+            print(f"Guest {guest_id} is not enrolled in the program.")
+
+    def redeem_points(self, guest_id, points_to_redeem):
+        """Allow guests to redeem loyalty points."""
+        if guest_id in self.members and self.members[guest_id] >= points_to_redeem:
+            self.members[guest_id] -= points_to_redeem
+            print(f"Guest {guest_id} redeemed {points_to_redeem} points.")
+        else:
+            print(f"Insufficient points or guest not enrolled.")
+
+    def get_membership_level(self, guest_id):
+        """Determine the guest's membership level based on their points."""
+        if guest_id in self.members:
+            points = self.members[guest_id]
+            for level, threshold in sorted(self.membership_levels.items(), key=lambda x: -x[1]):
+                if points >= threshold:
+                    return f"Guest {guest_id} is at {level} level."
+            return f"Guest {guest_id} has no membership level yet."
+        else:
+            return "Guest not enrolled in the loyalty program."
