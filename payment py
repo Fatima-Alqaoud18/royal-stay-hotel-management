@@ -1,0 +1,33 @@
+"""
+payment.py
+This module manages payment processing for the Royal Stay Hotel Management System.
+"""
+
+class Payment:
+    def __init__(self, payment_id, guest, amount, payment_method):
+        """Initialize a payment with guest details, amount, and payment method."""
+        self.payment_id = payment_id
+        self.guest = guest  # Guest object
+        self.amount = amount
+        self.payment_method = payment_method  # e.g., "Credit Card", "Mobile Wallet"
+        self.status = "Pending"
+
+    def process_payment(self):
+        """Process the payment and update status."""
+        if self.amount > 0:
+            self.status = "Completed"
+            print(f"Payment {self.payment_id} of ${self.amount} by {self.guest.name} completed using {self.payment_method}.")
+        else:
+            print("Invalid payment amount.")
+
+    def refund_payment(self):
+        """Refund the payment."""
+        if self.status == "Completed":
+            self.status = "Refunded"
+            print(f"Payment {self.payment_id} has been refunded.")
+        else:
+            print("Payment not completed, cannot refund.")
+
+    def display_payment_details(self):
+        """Display payment details."""
+        return f"Payment {self.payment_id}: {self.guest.name}, Amount: ${self.amount}, Method: {self.payment_method}, Status: {self.status}"
